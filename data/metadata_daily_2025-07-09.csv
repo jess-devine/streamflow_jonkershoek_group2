@@ -1,0 +1,15 @@
+phenomenon,offering,unit,offeringshort
+Streamflow,Average,Cumecs,Ave
+Air Temperature,Daily Maximum,Degrees Celsius,Max
+Air Temperature,Daily Minimum,Degrees Celsius,Min
+Rainfall,Total Daily Rainfall,Millimeter,Total
+Relative Humidity,Daily Maximum,Percent,Max
+Relative Humidity,Daily Minimum,Percent,Min
+Soil Moisture 30cm,Daily Maximum,Percent,Max
+Soil Moisture 10cm,Daily Maximum,Percent,Max
+Soil Moisture 20cm,Daily Maximum,Percent,Max
+Soil Moisture 30cm,Daily Minimum,Percent,Min
+Soil Moisture 20cm,Daily Minimum,Percent,Min
+Soil Moisture 10cm,Daily Minimum,Percent,Min
+Wind Speed,Average Daily,Meters per second,Ave
+Wind Speed,Daily Maximum,Meters per second,Max

@@ -1,0 +1,9 @@
+phenomenon,offering,unit
+Streamflow,Average,Cumecs
+Air Temperature,Average,Degrees Celsius
+Rainfall,Total Hourly rainfall,Millimeter
+Relative Humidity,Average,Percent
+Soil Moisture 20cm,Average,Percent
+Soil Moisture 10cm,Average,Percent
+Soil Moisture 30cm,Average,Percent
+Wind Speed,Average,Meters per second
