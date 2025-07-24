@@ -1,0 +1,20 @@
+model{
+  #### Data Model
+  for(t in 1:n){
+    y[t] ~ dnorm(x[t],tau_obs)
+  }
+  
+  #### Process Model
+  for(t in 2:n){
+    mu_x[t] <- mu_x[t-1] + beta_rain * rain[t] 
+    x[t] ~ dnorm(mu_x[t], tau_add)
+  }
+  
+  #### Priors
+  
+  beta_rain ~ dnorm(0, 0.001)
+  mu_x[1] ~ dnorm(x_ic, tau_ic)
+  x[1] ~ dnorm(mu_x[1], tau_add)
+  tau_obs ~ dgamma(a_obs, r_obs)
+  tau_add ~ dgamma(a_add, r_add)
+}
