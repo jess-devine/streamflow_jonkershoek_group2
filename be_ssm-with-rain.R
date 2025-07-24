@@ -9,6 +9,19 @@ streamflow_new <- streamflow
 streamflow_new[800:n] <- NA
 
 
+### --- prepare rain variable
+
+sel <- 5000:6000
+rain <- hdat2014$Rainfall[sel]
+
+hist(rain, las = 1, main = "")
+
+par(mfrow = c(2, 1))
+plot.ts(rain)
+plot.ts(streamflow)
+
+
+### --- Fit JAGS model: ssm plus rain
 
 data <- list(y = streamflow_new,
              n = length(streamflow),      ## data
@@ -31,7 +44,6 @@ for(i in 1:nchain){
                     beta_rain = rnorm(1, 0, 1))
 }
 
-
 j.model   <- jags.model (file = "be_ssm-rain.jags",
                          data = data,
                          inits = init,
@@ -42,6 +54,14 @@ j.model   <- jags.model (file = "be_ssm-rain.jags",
 jags.out   <- coda.samples (model = j.model,
                             variable.names = c("tau_add","tau_obs", "beta_rain"),
                             n.iter = 3000)
+
+jags.out   <- coda.samples (model = j.model,
+                            variable.names = c("tau_add","tau_obs", "beta_rain"),
+                            n.iter = 3000)
+jags.out   <- coda.samples (model = j.model,
+                            variable.names = c("tau_add","tau_obs", "beta_rain"),
+                            n.iter = 3000)
+
 plot(jags.out)
 #dic.samples(j.model, 2000)
 
@@ -51,7 +71,7 @@ jags.out   <- coda.samples (model = j.model,
                             n.iter = 10000)
 
 
-### plot observed and forecast
+### ---- plot observed and forecast
 
 tt = seq(1, length(streamflow))       ## adjust to zoom in and out
 out <- as.matrix(jags.out)         ## convert from coda to matrix  
