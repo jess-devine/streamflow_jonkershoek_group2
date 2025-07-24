@@ -1,0 +1,16 @@
+model{
+  #### Data Model
+  for(t in 1:n){
+    y[t] ~ dnorm(x[t],tau_obs)
+  }
+  
+  #### Process Model
+  for(t in 2:n){
+    x[t] ~ dnorm(x[t-1], tau_add)
+  }
+  
+  #### Priors
+  x[1] ~ dnorm(x_ic, tau_ic)
+  tau_obs ~ dgamma(a_obs, r_obs)
+  tau_add ~ dgamma(a_add, r_add)
+}
