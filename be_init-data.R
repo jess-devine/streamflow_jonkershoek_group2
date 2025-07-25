@@ -6,13 +6,14 @@
 library(here)
 library(tidyverse)
 library(rjags)
+library(zoo)
+library(patchwork)
 
 hdat <- read.csv(here("data", "data_hourly_2025-07-09.csv"))
 head(hdat)
 names(hdat)
 dim(hdat)
 
-library(zoo)
 hdat$year <- year(hdat$Date)
 hdat2014 <- hdat[hdat$year == "2014", ]
 
@@ -63,4 +64,54 @@ par(mfrow = c(3, 1))
 plot(streamflow~temperature)
 plot(streamflow~RH)
 plot(streamflow ~ VPD)
+
+###############################################################
+
+# PLOTS 
+
+# Convert time series to data frames
+rain_df <- data.frame(time = time(rain), value = as.numeric(rain))
+streamflow_df <- data.frame(time = time(streamflow), value = as.numeric(streamflow))
+vpd_df <- data.frame(time = time(VPD), value = as.numeric(VPD))
+
+# Create individual plot objects
+p1 <- ggplot(rain_df, aes(time, value)) + 
+  geom_line() +
+  geom_vline(xintercept = 800, color = "red", linetype = "dashed") +
+  labs( y = "Rain (mm)", x = "Time (hours)")+
+  theme(panel.grid = element_blank(),  # Removes all grid lines
+        panel.background = element_blank(),  # Removes gray background
+        panel.border = element_rect(fill = NA, color = "black"))  # Adds border
+
+p2 <- ggplot(streamflow_df, aes(time, value)) + 
+  geom_line() +
+  geom_vline(xintercept = 800, color = "red", linetype = "dashed") +
+  labs(y = "Streamflow (Cumecs)", x = "Time (hours)")+
+  theme(panel.grid = element_blank(),  # Removes all grid lines
+        panel.background = element_blank(),  # Removes gray background
+        panel.border = element_rect(fill = NA, color = "black"))  # Adds border
+
+p3 <- ggplot(vpd_df, aes(time, value)) + 
+  geom_line() +
+  geom_vline(xintercept = 800, color = "red", linetype = "dashed") +
+  labs( y = "VPD (kPa)", x = "Time (hours)")+
+  theme(panel.grid = element_blank(),  # Removes all grid lines
+        panel.background = element_blank(),  # Removes gray background
+        panel.border = element_rect(fill = NA, color = "black"))  # Adds border
+
+# Combine into one plot object
+init_rain_plot <- p1 / p2 
+init_VPD_plot <- p3 / p2 
+
+# Save the combined plot object
+ggsave(here("output", "init_rain_plot.png"), 
+       plot = init_rain_plot,
+       width = 10, 
+       height = 8, 
+       dpi = 300)
+ggsave(here("output", "init_VPD_plot.png"), 
+       plot = init_VPD_plot,
+       width = 10, 
+       height = 8, 
+       dpi = 300)
 
