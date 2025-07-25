@@ -1,5 +1,7 @@
 ## https://rpubs.com/jimclark/741274
 
+## x_t = theta * x_t-1 + beta * rain_t + e_add
+
 model{
 
   #### Process Model

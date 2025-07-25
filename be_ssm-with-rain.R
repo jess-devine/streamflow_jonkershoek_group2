@@ -41,7 +41,7 @@ for(i in 1:nchain){
   ##  y.samp = sample(y,length(y),replace=TRUE)
   init[[i]] <- list(tau_add = 1 / var(diff(streamflow), na.rm= TRUE),  ## initial guess on process precision
                     tau_obs = 5 / var(streamflow, na.rm= TRUE),      ## initial guess on obs precision
-                    beta_rain = rnorm(1, 0, 1), 
+                    beta_rain = runif(1, 0, 1), 
                     theta = runif(1, 0, 1))
 }
 
@@ -61,7 +61,7 @@ plot(jags.out)
 
 
 jags.out   <- coda.samples (model = j.model,
-                            variable.names = c("x","tau_add","tau_obs", "mu_x"),
+                            variable.names = c("x","tau_add","tau_obs", "theta"),
                             n.iter = 10000)
 
 
@@ -96,3 +96,13 @@ points(tt, pred, col = "red", pch = 20, cex = 0.3)
 legend("topleft", bty = "n", col = c("black", "red"), 
        legend = c("observed", "predicted"), lwd = 2)
 abline(v = 800, col = "grey", lty = 2)
+
+### 
+
+#summary(jags.out)
+
+jags.out.sum <- apply(out, 2, mean)
+jags.out.sum
+(tau_obs <- jags.out.sum["tau_obs"])
+(tau_proc <- jags.out.sum["tau_add"])
+(theta <- jags.out.sum["theta"])
