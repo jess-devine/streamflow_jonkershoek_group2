@@ -1,23 +1,21 @@
-model{
-
+model {
   #### Process Model
   mu_x[1] ~ dnorm(x_ic, tau_ic)
-  x[1] <- mu_x[1] #dnorm(x_ic, tau_ic)
-   
-  for(t in 2:n){
-    mu_x[t] <- theta * x[t-1] + beta_VPD * VPD[t]
-    x[t] ~ dnorm(mu_x[t], tau_add)  
+  x[1] <- mu_x[1] 
+
+  for (t in 2:n) {
+    mu_x[t] <- theta * x[t-1] + beta_VPD * VPD[t]  # VPD is log-transformed
+    x[t] ~ dnorm(mu_x[t], tau_add)
   }
-  
+
   #### Data Model
-  for(t in 1:n){
+  for (t in 1:n) {
     y[t] ~ dnorm(x[t], tau_obs)
   }
-  
-  #### Priors
 
-  beta_VPD ~ dunif(0, 1)
-  theta ~ dunif(0, 1)
-  tau_obs ~ dgamma(a_obs, r_obs)
-  tau_add ~ dgamma(a_add, r_add)
+  #### Priors
+  beta_VPD ~ dnorm(0, 0.1)    # Allows positive/negative effects
+  theta ~ dbeta(1,1)        # AR(1) term, constrained to [0,1]
+  tau_obs ~ dgamma(1,1)
+  tau_add ~ dgamma(1,1)
 }
